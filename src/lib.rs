@@ -23,6 +23,7 @@ extern crate httparse;
 extern crate relay;
 extern crate rustc_serialize as serialize;
 extern crate time;
+extern crate net2;
 #[macro_use] extern crate tokio_core as tokio;
 extern crate tokio_proto;
 extern crate tokio_service;

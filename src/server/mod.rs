@@ -21,6 +21,7 @@ use tokio_proto::BindServer;
 use tokio_proto::streaming::Message;
 use tokio_proto::streaming::pipeline::ServerProto;
 pub use tokio_service::{NewService, Service};
+use net2::TcpBuilder;
 
 pub use self::request::Request;
 pub use self::response::Response;
@@ -84,9 +85,14 @@ impl Http {
         where S: NewService<Request = Request, Response = Response, Error = ::Error> +
                     Send + Sync + 'static,
     {
+        use net2::unix::UnixTcpBuilderExt;
         let core = try!(Core::new());
         let handle = core.handle();
-        let listener = try!(TcpListener::bind(addr, &handle));
+        let listener = try!(TcpBuilder::new_v4());
+        try!(listener.reuse_port(true));
+        try!(listener.bind(addr));
+        let listener = try!(listener.listen(128));
+        let listener = try!(TcpListener::from_listener(listener, addr, &handle));
 
         Ok(Server {
             new_service: new_service,

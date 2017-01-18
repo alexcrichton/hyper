@@ -25,6 +25,7 @@ tokio-proto = "0.1"
 tokio-service = "0.1"
 unicase = "1.0"
 url = "1.0"
+net2 = "0.2"
 
 [dev-dependencies]
 num_cpus = "1.0"
